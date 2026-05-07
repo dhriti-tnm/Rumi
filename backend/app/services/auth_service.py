@@ -22,7 +22,6 @@ def create_user(db: Session, user_data):
     db.add(user)
     db.commit()
     db.refresh(user)
-
     return user
     
 def authenticate_user(db: Session, username: str, password: str):

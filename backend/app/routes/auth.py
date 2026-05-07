@@ -13,6 +13,20 @@ security = HTTPBearer()
 
 @router.post("/register")
 def register(data: RegisterRequest, db: Session = Depends(get_session)):
+    if db.query(User).filter(User.email == data.email).first():
+        return api_response(
+            success=False,
+            message="Email already registered",
+            result=None,
+            code=status.HTTP_400_BAD_REQUEST
+        )
+    if db.query(User).filter(User.username == data.username).first():
+        return api_response(
+            success=False,
+            message="Username already registered",
+            result=None,
+            code=status.HTTP_400_BAD_REQUEST
+        )
     user = create_user(db, data)
 
     return api_response(
@@ -24,7 +38,7 @@ def register(data: RegisterRequest, db: Session = Depends(get_session)):
             "email": user.email,
             "username": user.username
         },
-        status_code=status.HTTP_201_CREATED
+        code=status.HTTP_201_CREATED
     )
 
 

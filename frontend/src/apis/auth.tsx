@@ -1,25 +1,24 @@
-import axios from "axios";
+import { apiClient } from "./client";
+import type { ApiResponse, LoginResponse, RegisterResponse, MeResponse } from "../types/auth_types";
 
-const API_BASE_URL = import.meta.env.BASE_URL;
 
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+export const login = (username: string, password: string) => {
+  return apiClient.post<ApiResponse<LoginResponse>>("/auth/login", {
+    username,
+    password,
+  });
+};
 
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
 
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+export const register = ( name: string, username: string, email: string, password: string ) => {
+  return apiClient.post<ApiResponse<RegisterResponse>>("/auth/register", {name,username,email,password,});
+};
 
-  return config;
-});
 
-apiClient.interceptors.response.use(
-  (response) => {return response.data;},
-  (error) => {return Promise.reject(error?.response?.data || error.message);}
-);
+export const getMe = () => {
+  return apiClient.get<ApiResponse<MeResponse>>("/auth/me");
+};
+
+export const logout = () => {
+  return apiClient.post<ApiResponse<null>>("/auth/logout");
+};
