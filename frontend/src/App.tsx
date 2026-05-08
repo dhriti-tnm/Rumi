@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/loginPage";
 import Register from "./pages/signUpPage";
 import Dashboard from "./pages/home";
+import JournalPage from "./pages/journalPage";
 import { ProtectedRoute } from "./routes/protectedRoutes";
 
 function App() {
@@ -16,6 +17,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/journals"
+          element={
+            <ProtectedRoute>
+              <JournalPage />
             </ProtectedRoute>
           }
         />
